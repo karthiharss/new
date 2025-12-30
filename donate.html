@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Support Center – Donate | PetRescue</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #ff6f61;
+      --primary-soft: #ff9f7a;
+      --text-dark: #374151;
+      --text-medium: #4b5563;
+      --bg: #fff5f0;
+      --mint: #d8f3dc;
+      --sky: #cde8ff;
+      --lavender: #e9d5ff;
+      --yellow: #fef9c3;
+      --peach: #ffe4d6;
+    }
+
+    body {
+      margin: 0;
+      font-family: Poppins, sans-serif;
+      background: radial-gradient(circle at top left, #ffe4d6, #fff5f0);
+      overflow-x: hidden;
+      color: var(--text-dark);
+    }
+
+    /* NAVBAR */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 14px 8vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(16px);
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .nav-links a { text-decoration: none; color: var(--text-dark); }
+
+    .btn-nav {
+      padding: 8px 18px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-soft));
+      border-radius: 999px;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 8px 20px rgba(255,111,97,0.45);
+    }
+
+    /* PAGE HEADER */
+    .page-header {
+      padding: 120px 8vw 40px;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      font-size: 42px;
+      color: #222;
+    }
+
+    .page-header p {
+      font-size: 16px;
+      color: var(--text-medium);
+      max-width: 620px;
+      margin: 10px auto 0;
+    }
+
+    /* DONATION CARDS GRID */
+    .donation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 26px;
+      padding: 0 8vw 70px;
+    }
+
+    .donate-card {
+      background: white;
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.08);
+      transition: 0.3s;
+      position: relative;
+    }
+
+    .donate-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 34px rgba(0,0,0,0.14);
+    }
+
+    .donate-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      margin-bottom: 12px;
+    }
+
+    .donate-card h3 { font-size: 18px; margin-bottom: 6px; }
+    .donate-card p { font-size: 14px; color: var(--text-medium); margin-bottom: 16px; }
+
+    .btn-donate {
+      width: 100%;
+      padding: 10px 20px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-soft));
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 8px 20px rgba(255,111,97,0.45);
+      transition: 0.2s;
+    }
+
+    .btn-donate:hover { transform: translateY(-2px); }
+
+    /* POPUP FORM */
+    .popup-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .popup {
+      width: 90%;
+      max-width: 420px;
+      background: white;
+      padding: 26px;
+      border-radius: 22px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+      animation: pop 0.3s ease;
+    }
+
+    @keyframes pop {
+      from { transform: scale(0.7); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      margin-bottom: 14px;
+      font-size: 14px;
+    }
+
+    textarea { resize: none; }
+
+    .close-btn {
+      margin-top: 10px;
+      background: #ccc;
+      color: #222 !important;
+    }
+
+    footer {
+      text-align: center;
+      padding: 18px;
+      margin-top: 40px;
+      background: #fff7fb;
+      color: var(--text-medium);
+      border-top: 1px solid rgba(248,187,208,0.6);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">🐾 PET<span>RESCUE</span></div>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#features">Features</a>
+      <a href="index.html#gallery">Gallery</a>
+      <a href="index.html#how">How it works</a>
+      <button class="btn-nav" onclick="location.href='login.html'">Login</button>
+      <button class="btn-nav" onclick="location.href='register.html'">Register</button>
+    </nav>
+  </header>
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <h1>Make a Paw-sitive Impact 🐾</h1>
+    <p>Your donation saves lives — from food & medicine to rescue, shelter, and volunteers.</p>
+  </div>
+
+  <!-- DONATION GRID -->
+  <div class="donation-grid">
+
+    <!-- 1 Food Donation -->
+    <div class="donate-card">
+      <div class="donate-icon" style="background:var(--mint);">🍖</div>
+      <h3>Food Donation</h3>
+      <p>Provide healthy meals for rescued dogs and cats.</p>
+      <button class="btn-donate" onclick="openForm('Food Donation')">Donate Food</button>
+    </div>
+
+    <!-- 2 Medical Sponsorship -->
+    <div class="donate-card">
+      <div class="donate-icon" style="background:var(--sky);">💉</div>
+      <h3>Medical Sponsorship</h3>
+      <p>Help animals receive vaccinations, surgeries & treatment.</p>
+      <button class="btn-donate" onclick="openForm('Medical Sponsorship')">Sponsor Treatment</button>
+    </div>
+
+    <!-- 3 Supplies Donation -->
+    <div class="donate-card">
+      <div class="donate-icon" style="background:var(--lavender);">📦</div>
+      <h3>Rescue Supplies</h3>
+      <p>Donate blankets, collars, crates, toys & hygiene kits.</p>
+      <button class="btn-donate" onclick="openForm('Rescue Supplies')">Donate Supplies</button>
+    </div>
+
+    <!-- 4 Pet Sponsorship -->
+    <div class="donate-card">
+      <div class="donate-icon" style="background:var(--yellow);">🐕</div>
+      <h3>Adopt-a-Pet Sponsorship</h3>
+      <p>Support a rescued pet until they find a forever home.</p>
+      <button class="btn-donate" onclick="openForm('Pet Sponsorship')">Sponsor a Pet</button>
+    </div>
+
+    <!-- 5 Emergency Rescue Fund -->
+    <div class="donate-card">
+      <div class="donate-icon" style="background:#ffe0c7;">🚑</div>
+      <h3>Emergency Rescue Fund</h3>
+      <p>Support pets needing urgent medical help and emergency rescue.</p>
+      <button class="btn-donate" onclick="openForm('Emergency Rescue Fund')">Support Rescue</button>
+    </div>
+
+    <!-- 6 Shelter Maintenance -->
+    <div class="donate-card">
+      <div class="donate-icon" style="background:#f3f4f6;">🏠</div>
+      <h3>Shelter Maintenance</h3>
+      <p>Help maintain cleanliness, electricity, water & bedding.</p>
+      <button class="btn-donate" onclick="openForm('Shelter Maintenance')">Support Shelter</button>
+    </div>
+
+    <!-- 7 Transport Support -->
+    <div class="donate-card">
+      <div class="donate-icon" style="background:#dbeafe;">🚗</div>
+      <h3>Transport Support</h3>
+      <p>Help transport rescued pets safely to vets or shelters.</p>
+      <button class="btn-donate" onclick="openForm('Transport Support')">Donate Transport</button>
+    </div>
+
+    <!-- 8 Volunteer Support -->
+    <div class="donate-card">
+      <div class="donate-icon" style="background:#fff7b3;">🦺</div>
+      <h3>Volunteer Support Fund</h3>
+      <p>Support training, rescue gear, ID cards & emergency kits.</p>
+      <button class="btn-donate" onclick="openForm('Volunteer Support Fund')">Support Volunteers</button>
+    </div>
+
+  </div>
+
+  <!-- POPUP FORM -->
+  <div class="popup-bg" id="popup-bg">
+    <div class="popup">
+      <h2 id="popup-title"></h2>
+
+      <input type="text" placeholder="Your Name" required>
+      <input type="text" placeholder="Contact Number" required>
+      <textarea placeholder="Message or additional details"></textarea>
+
+      <button class="btn-donate">Submit Donation</button>
+      <button class="btn-donate close-btn" onclick="closeForm()">Close</button>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 PetRescue — Together we save lives, one paw at a time.
+  </footer>
+
+  <script>
+    function openForm(type) {
+      document.getElementById("popup-title").innerText = type;
+      document.getElementById("popup-bg").style.display = "flex";
+    }
+
+    function closeForm() {
+      document.getElementById("popup-bg").style.display = "none";
+    }
+  </script>
+
+</body>
+</html>

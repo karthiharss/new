@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pet Capture & Preprocess</title>
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #FDE9DF, #F8EEF3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    width: 95%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    align-items: center;
+}
+video, img {
+    width: 100%;
+    border-radius: 15px;
+    margin-top: 10px;
+}
+button, input[type=file] {
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+button:hover { transform: scale(1.05); }
+#switch-btn { background: #FFD97D; color: #2D2D2D; }
+#capture-btn { background: #FF7D6E; color: #fff; }
+#upload-btn { background: #E6E9F5; color: #2D2D2D; }
+#preprocess-btn { background: #A9E9FF; color: #003A4D; }
+#message {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: 500;
+    display: none;
+    width: 100%;
+    text-align: center;
+}
+.success { background: #C5FFCF; color: #146A23; }
+.error { background: #FFD2D2; color: #A10000; }
+</style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Capture or Upload Pet Photo</h2>
+    <video id="video" autoplay playsinline></video>
+    <img id="preview" style="display:none;">
+
+    <button id="switch-btn">🔄 Switch Camera</button>
+    <button id="capture-btn">📸 Capture</button>
+    <input type="file" id="file-input" accept="image/*">
+    <button id="upload-btn">⬆ Upload to System</button>
+    <button id="preprocess-btn">⚙ Preprocess Image</button>
+
+    <div id="message"></div>
+</div>
+
+<script>
+let stream;
+let imageBlob = null;
+let useFrontCamera = false;
+
+// Start camera
+async function startCamera() {
+    if(stream) stream.getTracks().forEach(track=>track.stop());
+    try{
+        stream = await navigator.mediaDevices.getUserMedia({video:{facingMode: useFrontCamera?'user':'environment'}});
+        document.getElementById('video').srcObject = stream;
+    } catch {
+        showMessage('Camera access failed!', 'error');
+    }
+}
+startCamera();
+
+// Switch camera
+document.getElementById('switch-btn').onclick = () => { useFrontCamera = !useFrontCamera; startCamera(); };
+
+// Show messages
+function showMessage(msg, type){
+    const m = document.getElementById('message');
+    m.innerText = msg;
+    m.className = type;
+    m.style.display = 'block';
+    setTimeout(()=>m.style.display='none', 4000);
+}
+
+// Capture photo
+document.getElementById('capture-btn').onclick = ()=>{
+    const video = document.getElementById('video');
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video,0,0);
+    canvas.toBlob(blob=>{
+        imageBlob = blob;
+        const preview = document.getElementById('preview');
+        preview.src = URL.createObjectURL(blob);
+        preview.style.display='block';
+        showMessage('Image captured!', 'success');
+    });
+};
+
+// Upload image from file input
+document.getElementById('file-input').onchange = (e)=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    imageBlob = file;
+    const preview = document.getElementById('preview');
+    preview.src = URL.createObjectURL(file);
+    preview.style.display='block';
+    showMessage('Image selected!', 'success');
+};
+
+// Upload to backend
+document.getElementById('upload-btn').onclick = async ()=>{
+    if(!imageBlob) return showMessage('No image to upload!', 'error');
+    let formData = new FormData();
+    formData.append('image', imageBlob, 'pet.jpg');
+    try{
+        let res = await fetch('http://127.0.0.1:5000/upload',{method:'POST', body:formData});
+        let data = await res.json();
+        showMessage(data.message,'success');
+    } catch { showMessage('Upload failed!','error'); }
+};
+
+// Preprocess and display on same page
+document.getElementById('preprocess-btn').onclick = async ()=>{
+    if(!imageBlob) return showMessage('No image to preprocess!','error');
+    let formData = new FormData();
+    formData.append('image', imageBlob, 'pet.jpg');
+    try{
+        let res = await fetch('http://127.0.0.1:5000/preprocess',{method:'POST',body:formData});
+        let data = await res.json();
+        showMessage(data.message, data.status==='success'?'success':'error');
+
+        if(data.status==='success'){
+            const preview = document.getElementById('preview');
+            if(data.processed_image_base64){
+                preview.src = `data:image/jpeg;base64,${data.processed_image_base64}`;
+            } else if(data.processed_image_url){
+                preview.src = data.processed_image_url;
+            }
+            preview.style.display='block';
+        }
+
+    } catch { showMessage('Preprocessing failed!','error'); }
+};
+</script>
+
+</body>
+</html>

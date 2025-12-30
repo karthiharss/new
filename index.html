@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PetRescue – Make a Difference</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --peach: #ffe4d6;
+      --mint: #d8f3dc;
+      --sky: #cde8ff;
+      --lavender: #e9d5ff;
+      --pink: #ffd6e8;
+      --yellow: #fef9c3;
+      --primary: #ff6f61;
+      --primary-soft: #ff9f7a;
+      --text-dark: #374151;
+      --text-medium: #4b5563;
+      --bg: #fff5f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at top left, #ffe4d6, #fff5f0);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 14px 8vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+      transition: box-shadow 0.3s ease, background 0.3s ease, padding 0.3s ease;
+    }
+
+    .navbar.scrolled {
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.95);
+      padding: 10px 8vw;
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .logo span {
+      color: var(--primary-soft);
+    }
+
+    .logo-icon {
+      font-size: 26px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .nav-links a {
+      position: relative;
+      padding-bottom: 2px;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      border-radius: 999px;
+      transition: width 0.25s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .btn-nav {
+      padding: 8px 18px;
+      border-radius: 999px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--primary), var(--primary-soft));
+      color: white;
+      box-shadow: 0 6px 18px rgba(255, 111, 97, 0.45);
+    }
+
+    /* ========= HERO ========= */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 110px 8vw 60px;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url("https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=1400&")
+        center/cover no-repeat;
+      filter: saturate(1.1);
+      z-index: -2;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(255, 228, 214, 0.9), rgba(205, 232, 255, 0.92));
+      mix-blend-mode: lighten;
+      z-index: -1;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      align-items: center;
+      gap: 40px;
+      width: 100%;
+    }
+
+    .hero-text {
+      max-width: 600px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 12px;
+      color: var(--text-medium);
+    }
+
+    .hero-badge span {
+      font-size: 16px;
+    }
+
+    .hero-title {
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.1;
+      margin-bottom: 14px;
+      color: #222;
+    }
+
+    .hero-title span {
+      color: var(--primary);
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      color: var(--text-medium);
+      margin-bottom: 22px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .btn-primary,
+    .btn-outline {
+      padding: 12px 24px;
+      border-radius: 999px;
+      border: none;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-soft));
+      color: white;
+      box-shadow: 0 8px 22px rgba(255, 111, 97, 0.55);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(255, 111, 97, 0.65);
+    }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--text-medium);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+    }
+
+    .btn-outline:hover {
+      background: white;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(148, 163, 184, 0.4);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      font-size: 12px;
+      color: var(--text-medium);
+      margin-top: 10px;
+    }
+
+    .hero-meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-meta-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #34d399;
+    }
+
+    /* HERO RIGHT - CARD & FLOATING ELEMENTS */
+    .hero-right {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-card {
+      width: 100%;
+      max-width: 340px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 26px;
+      padding: 18px 18px 20px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+      backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+    }
+
+    .hero-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .hero-card-avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--sky), var(--lavender));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+    }
+
+    .hero-card-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .hero-card-tag {
+      font-size: 11px;
+      color: var(--text-medium);
+    }
+
+    .hero-card-img {
+      width: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .hero-card-img img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+      height: 180px;
+    }
+
+    .hero-card-body h3 {
+      font-size: 16px;
+      margin-bottom: 4px;
+      color: #111827;
+    }
+
+    .hero-card-body p {
+      font-size: 13px;
+      color: var(--text-medium);
+      margin-bottom: 10px;
+    }
+
+    .hero-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .hero-tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 11px;
+    }
+
+    .hero-tag {
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .hero-tag:nth-child(2) {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .hero-tag:nth-child(3) {
+      background: #e0f2fe;
+      color: #1d4ed8;
+    }
+
+    .hero-card-btn {
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: none;
+      background: #fb7185;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 11px;
+      box-shadow: 0 4px 14px rgba(248, 113, 113, 0.55);
+      transition: transform 0.2s ease;
+    }
+
+    .hero-card-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    /* FLOATING SHAPES */
+    .blob {
+      position: absolute;
+      border-radius: 999px;
+      opacity: 0.8;
+      mix-blend-mode: multiply;
+      filter: blur(0.3px);
+      animation: float 10s ease-in-out infinite;
+    }
+
+    .blob-1 {
+      width: 180px;
+      height: 180px;
+      background: var(--sky);
+      top: -30px;
+      right: -40px;
+    }
+
+    .blob-2 {
+      width: 120px;
+      height: 120px;
+      background: var(--mint);
+      bottom: 10px;
+      left: -50px;
+      animation-duration: 12s;
+    }
+
+    .blob-3 {
+      width: 80px;
+      height: 80px;
+      background: var(--pink);
+      bottom: 150px;
+      right: -30px;
+      animation-duration: 9s;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+
+    /* PAW FLOATS ON HERO */
+    .floating-paw {
+      position: absolute;
+      font-size: 24px;
+      opacity: 0.5;
+      animation: pawFloat 6s ease-in-out infinite;
+    }
+
+    .paw-1 {
+      top: 18%;
+      left: 5%;
+    }
+
+    .paw-2 {
+      bottom: 20%;
+      left: 12%;
+      animation-delay: 1s;
+    }
+
+    .paw-3 {
+      top: 22%;
+      right: 10%;
+      animation-delay: 0.5s;
+    }
+
+    @keyframes pawFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    /* ========= GENERIC SECTION STYLES ========= */
+    section {
+      padding: 80px 8vw;
+      position: relative;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .section-eyebrow {
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .section-title {
+      font-size: 28px;
+      margin-bottom: 8px;
+      color: #111827;
+    }
+
+    .section-subtitle {
+      font-size: 14px;
+      color: var(--text-medium);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ========= ABOUT ========= */
+    .about {
+      background: linear-gradient(135deg, var(--mint), #fef9c3);
+      border-radius: 40px 40px 0 0;
+      margin-top: -30px;
+      padding-top: 70px;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 36px;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .about-text p {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--text-medium);
+      margin-bottom: 14px;
+    }
+
+    .about-highlights {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .about-pill {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.9);
+      font-size: 12px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .about-pill span {
+      font-size: 15px;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+      font-size: 13px;
+    }
+
+    .about-stat {
+      padding: 10px 12px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.9);
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .about-stat-number {
+      font-size: 18px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .about-illustration {
+      position: relative;
+    }
+
+    .about-card {
+      background: #fef9c3;
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-card h3 {
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+
+    .about-card p {
+      font-size: 13px;
+      color: var(--text-medium);
+    }
+
+    .about-paws {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      font-size: 26px;
+      opacity: 0.35;
+    }
+
+    /* ========= FEATURES ========= */
+    .features {
+      background: var(--sky);
+    }
+
+    .feature-grid {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 22px;
+      padding: 20px 18px;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
+      position: relative;
+      overflow: hidden;
+      transform: translateY(0);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, translate 0.2s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
+    }
+
+    .feature-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fee2e2;
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+
+    .feature-card:nth-child(2) .feature-icon { background: #dcfce7; }
+    .feature-card:nth-child(3) .feature-icon { background: #e0f2fe; }
+    .feature-card:nth-child(4) .feature-icon { background: #fce7f3; }
+
+    .feature-card h3 {
+      font-size: 16px;
+      margin-bottom: 6px;
+      color: #111827;
+    }
+
+    .feature-card p {
+      font-size: 13px;
+      color: var(--text-medium);
+      line-height: 1.6;
+    }
+
+    .feature-ribbon {
+      position: absolute;
+      right: -40px;
+      top: 10px;
+      background: #fef3c7;
+      color: #92400e;
+      font-size: 11px;
+      padding: 4px 40px;
+      transform: rotate(25deg);
+      font-weight: 600;
+    }
+
+    /* ========= GALLERY WITH FILTER ========= */
+    .gallery {
+      background: var(--lavender);
+    }
+
+    .filter-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0 26px;
+    }
+
+    .filter-btn {
+      padding: 8px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(255, 255, 255, 0.9);
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 8px 20px rgba(255, 111, 97, 0.5);
+      border-color: transparent;
+      transform: translateY(-1px);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .gallery-item {
+      border-radius: 20px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+      transform: translateY(0);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 210px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.05);
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
+    }
+
+    .gallery-caption {
+      padding: 10px 12px 12px;
+      font-size: 13px;
+      color: var(--text-medium);
+    }
+
+    /* ========= HOW IT WORKS ========= */
+    .how-it-works {
+      background: #fffaf0;
+    }
+
+    .step-grid {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 18px;
+    }
+
+    .step-card {
+      background: white;
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .step-number {
+      position: absolute;
+      top: -12px;
+      left: -12px;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      background: #f9a8d4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #831843;
+      font-size: 16px;
+      box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4);
+    }
+
+    .step-card h3 {
+      margin-top: 26px;
+      margin-bottom: 6px;
+      font-size: 16px;
+      color: #111827;
+    }
+
+    .step-card p {
+      font-size: 13px;
+      color: var(--text-medium);
+    }
+
+    /* ========= CTA ========= */
+    .cta {
+      background: radial-gradient(circle at top, #ffe4e6, #fff5f0);
+    }
+
+    .cta-box {
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 30px 26px;
+      border-radius: 28px;
+      background: white;
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.12);
+    }
+
+    .cta-box h2 {
+      font-size: 24px;
+      margin-bottom: 8px;
+      color: #111827;
+    }
+
+    .cta-box p {
+      font-size: 14px;
+      color: var(--text-medium);
+      margin-bottom: 18px;
+    }
+
+    /* ========= FOOTER ========= */
+    .footer {
+      background: #fff7fb;
+      padding: 16px 8vw 22px;
+      font-size: 13px;
+      text-align: center;
+      color: var(--text-medium);
+      border-top: 1px solid rgba(248, 187, 208, 0.7);
+    }
+
+    /* ========= SCROLL REVEAL ========= */
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .delay-1 { transition-delay: 0.15s; }
+    .delay-2 { transition-delay: 0.3s; }
+    .delay-3 { transition-delay: 0.45s; }
+
+    /* ========= RESPONSIVE ========= */
+    @media (max-width: 900px) {
+      .hero-inner,
+      .about-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .hero-right {
+        order: -1;
+        margin-bottom: 24px;
+      }
+
+      .hero {
+        padding-top: 100px;
+      }
+
+      .navbar {
+        padding-inline: 5vw;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .nav-links {
+        display: none; /* simple version: no mobile menu */
+      }
+
+      .hero {
+        padding-inline: 6vw;
+      }
+
+      section {
+        padding-inline: 6vw;
+      }
+
+      .about {
+        border-radius: 28px 28px 0 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <header class="navbar" id="navbar">
+    <div class="logo">
+      <span class="logo-icon">🐾</span> PET<span>RESCUE</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#hero">Home</a>
+      <a href="#about">About</a>
+      <a href="#features">Features</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#how">How it works</a>
+      <a href="admin_login.html" class="admin-link">Admin Login</a>
+      <button class="btn-nav" onclick="location.href='donate.html'">Donate</button>
+
+
+
+      </button>
+      <button class="btn-nav" onclick="location.href='pet_register.html'">Register Pet</button>
+      <button class="btn-nav" onclick="location.href='login.html'">Login</button>
+      <button class="btn-nav" onclick="location.href='register.html'">Register</button>
+
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="floating-paw paw-1">🐾</div>
+    <div class="floating-paw paw-2">🐾</div>
+    <div class="floating-paw paw-3">🐾</div>
+
+    <div class="hero-inner">
+      <div class="hero-text reveal">
+        <div class="hero-badge">
+          <span>💛</span> Trusted by 500+ pet lovers
+        </div>
+        <h1 class="hero-title">
+          Give Every <span>Paw</span> a Chance to Find Home
+        </h1>
+        <p class="hero-subtitle">
+          PetRescue is a safe platform where people can report found animals, search for their missing pets,
+          and adopt rescued companions — all in one place.
+        </p>
+        <div class="hero-actions">
+          
+          <a href="petadop.html">
+    <button class="btn-outline">View Pets to Adopt</button>
+
+            <a href="report-found-pet.html">
+    <button class="btn-outline">Report a Found Pet</button>
+</a>
+<a href="report_missing_pet.html">
+    <button class="btn-primary">Report Missing Pet</button>
+</a>
+        </div>
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <div class="hero-meta-dot"></div> Live reunions happening now
+          </div>
+          <div class="hero-meta-item">
+            ⭐ 4.9/5 community rating
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-right reveal delay-2">
+        <div class="hero-card">
+          <div class="blob blob-1"></div>
+          <div class="blob blob-2"></div>
+          <div class="blob blob-3"></div>
+
+          <div class="hero-card-header">
+            <div class="hero-card-avatar">🐶</div>
+            <div>
+              <div class="hero-card-name">Lucky</div>
+              <div class="hero-card-tag">2-year old · Male</div>
+            </div>
+          </div>
+
+          <div class="hero-card-img">
+            <img src="many.jpg" alt="Rescued dog">
+          </div>
+
+          <div class="hero-card-body">
+            <h3>Waiting for a Loving Family</h3>
+            <p>
+              Found near the city park, now vaccinated, playful, and ready for adoption. Help Lucky find his forever home.
+            </p>
+
+            <div class="hero-card-footer">
+              <div class="hero-tag-list">
+                <span class="hero-tag">Vaccinated</span>
+                <span class="hero-tag">Friendly</span>
+                <span class="hero-tag">Good with kids</span>
+              </div>
+              <button class="hero-card-btn">Adopt Now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Who We Are</div>
+      <h2 class="section-title">Caring Hearts, Saving Paws</h2>
+      <p class="section-subtitle">
+        We connect people who care — rescuers, adopters, and families searching for their lost pets — through one
+        simple, safe, and colorful platform.
+      </p>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-text reveal delay-1">
+        <p>
+          Every day, countless animals wander the streets scared, alone, or injured. PetRescue was created to give
+          them a digital voice — a place where they can be seen, reported, and reunited with the humans who love them.
+        </p>
+        <p>
+          Our mission is simple: <strong>no lost pet should go unnoticed.</strong> Through community reports,
+          verified listings, and adoption pathways, we make it easier than ever to bring a tail back home.
+        </p>
+
+        <div class="about-highlights">
+          <div class="about-pill"><span>🔁</span> Real-time updates</div>
+          <div class="about-pill"><span>🧡</span> Volunteer-powered</div>
+          <div class="about-pill"><span>🛡️</span> Verified records</div>
+        </div>
+
+        <div class="about-stats">
+          <div class="about-stat">
+            <div class="about-stat-number" data-count="320">0</div>
+            <div>Pets Reunited</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-number" data-count="120">0</div>
+            <div>Successful Adoptions</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-number" data-count="45">0</div>
+            <div>Active Volunteers</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-illustration reveal delay-2">
+        <div class="about-card">
+          <h3>“We found our dog in just 2 days.”</h3>
+          <p>
+            “I posted our missing pet on PetRescue and within hours a kind neighbor reported seeing him.
+            We were reunited the next day. The platform is a blessing for pet parents.”
+          </p>
+          <div class="about-paws">🐾🐾</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Features</div>
+      <h2 class="section-title">Everything You Need in One Place</h2>
+      <p class="section-subtitle">
+        From reporting a found animal to adopting a new best friend, PetRescue provides a smooth and supportive
+        journey for everyone involved.
+      </p>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-card reveal delay-1">
+        <div class="feature-icon">📸</div>
+        <h3>Report Found Pets</h3>
+        <p>
+          Share photos, location, and brief details. Your report instantly reaches nearby users searching for their lost pets.
+        </p>
+      </div>
+
+      <div class="feature-card reveal delay-2">
+        <div class="feature-icon">🔍</div>
+        <h3>Search Lost Pets</h3>
+        <p>
+          Filter by area, breed, color, and more. Get notified when new reports match your missing companion.
+        </p>
+      </div>
+
+      <div class="feature-card reveal delay-3">
+        <div class="feature-icon">🛡️</div>
+        <h3>Verified Admin Review</h3>
+        <p>
+          Admins validate submissions, prevent spam, and keep the community safe and trustworthy.
+        </p>
+        <div class="feature-ribbon">Safe & Checked</div>
+      </div>
+
+      <div class="feature-card reveal delay-3">
+        <div class="feature-icon">📢</div>
+        <h3>Smart Notifications</h3>
+        <p>
+          Receive alerts when a pet is found near your area or when your report gets a match or an update.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery" id="gallery">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Gallery</div>
+      <h2 class="section-title">Happy Rescue Moments</h2>
+      <p class="section-subtitle">
+        A collection of wagging tails, gentle purrs, and the people who chose to make a difference.
+      </p>
+    </div>
+
+    <div class="filter-buttons reveal delay-1">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="dogs">Dogs</button>
+      <button class="filter-btn" data-filter="cats">Cats</button>
+      <button class="filter-btn" data-filter="rescue">Rescue Moments</button>
+    </div>
+
+    <div class="gallery-grid">
+      <!-- DOGS -->
+      <div class="gallery-item dogs reveal delay-1">
+        <img src="./bruno.jpg" alt="">
+        <div class="gallery-caption">Bruno — once abandoned, now adored.</div>
+      </div>
+
+      <div class="gallery-item dogs reveal delay-2">
+        <img src="./milo.jpg" alt="">
+        <div class="gallery-caption">Milo — rescued from the streets, living his dream.</div>
+      </div>
+
+      <!-- CATS -->
+      <div class="gallery-item cats reveal delay-2">
+        <img src="./kitty.jpg" alt="">
+        <div class="gallery-caption">Bella — tiny fighter, big heart.</div>
+      </div>
+
+      <div class="gallery-item cats reveal delay-3">
+        <img src="./chase.jpg" alt="">
+        <div class="gallery-caption">Coco — now safe and playful.</div>
+      </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-it-works" id="how">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">How it works</div>
+      <h2 class="section-title">Three Simple Steps to Help</h2>
+      <p class="section-subtitle">
+        Whether you found a lost pet or are looking for one, our flow is designed to be clear, quick, and friendly.
+      </p>
+    </div>
+
+    <div class="step-grid">
+      <div class="step-card reveal delay-1">
+        <div class="step-number">1</div>
+        <h3>Share a Report</h3>
+        <p>
+          Upload a photo, add a short description, and drop a pin of where you found or lost the pet.
+        </p>
+      </div>
+
+      <div class="step-card reveal delay-2">
+        <div class="step-number">2</div>
+        <h3>We Match & Notify</h3>
+        <p>
+          Our system highlights possible matches and notifies families and volunteers in the nearby area.
+        </p>
+      </div>
+
+      <div class="step-card reveal delay-3">
+        <div class="step-number">3</div>
+        <h3>Reunite or Rehome</h3>
+        <p>
+          Support safe reunions or start the adoption process for animals who don’t have families yet.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- CTA -->
+  <section class="cta" id="cta">
+    <div class="cta-box reveal">
+      <h2>Ready to Make a Paw-sitive Impact?</h2>
+      <p>
+        Your small step today could be a giant leap towards safety and love for a lost animal.
+        Join our mission — report, share, adopt, or donate.
+      </p>
+      <div class="hero-actions" style="justify-content:center;">
+        <button class="btn-primary">Become a Volunteer</button>
+        <button class="btn-outline">Donate to Rescues</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    © 2025 PetRescue · Bringing Families Together, One Paw at a Time 🐾
+  </footer>
+
+  <!-- ========= JAVASCRIPT FOR ANIMATIONS & FILTERS ========= -->
+  <script>
+    // Navbar shadow on scroll
+    const navbar = document.getElementById("navbar");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 10) {
+        navbar.classList.add("scrolled");
+      } else {
+        navbar.classList.remove("scrolled");
+      }
+    });
+
+    // Scroll reveal using IntersectionObserver
+    const reveals = document.querySelectorAll(".reveal");
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("active");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.15,
+      }
+    );
+    reveals.forEach(el => observer.observe(el));
+
+    // Gallery filter
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const galleryItems = document.querySelectorAll(".gallery-item");
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const filter = btn.dataset.filter;
+        filterButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        galleryItems.forEach(item => {
+          item.style.display = "none";
+          if (filter === "all" || item.classList.contains(filter)) {
+            item.style.display = "block";
+          }
+        });
+      });
+    });
+
+    // Animated stats counting
+    const statNumbers = document.querySelectorAll("[data-count]");
+    const statObserver = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            const target = parseInt(el.dataset.count, 10);
+            let current = 0;
+            const step = Math.ceil(target / 60);
+
+            const counter = setInterval(() => {
+              current += step;
+              if (current >= target) {
+                current = target;
+                clearInterval(counter);
+              }
+              el.textContent = current;
+            }, 20);
+
+            statObserver.unobserve(el);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+    statNumbers.forEach(el => statObserver.observe(el));
+  </script>
+</body>
+</html>

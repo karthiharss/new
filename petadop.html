@@ -1,0 +1,269 @@
+<section class="pet-adoption reveal" id="adoption">
+  <div class="section-header">
+    <div class="section-eyebrow">Adopt a Pet</div>
+    <h2 class="section-title">Find Your Perfect Companion</h2>
+    <p class="section-subtitle">
+      Choose your preferences below to find pets looking for a loving home.
+    </p>
+  </div>
+
+  <div class="pet-filters">
+    <select id="pet-type">
+      <option value="">All Types</option>
+      <option value="dog">Dog</option>
+      <option value="cat">Cat</option>
+      <option value="bird">Bird</option>
+    </select>
+    <select id="pet-age">
+      <option value="">All Ages</option>
+      <option value="puppy">Puppy/Kitten (<1 yr)</option>
+      <option value="young">Young (1–3 yrs)</option>
+      <option value="adult">Adult (3–7 yrs)</option>
+      <option value="senior">Senior (7+ yrs)</option>
+    </select>
+    <select id="pet-color">
+      <option value="">All Colors</option>
+      <option value="black">Black</option>
+      <option value="white">White</option>
+      <option value="brown">Brown</option>
+      <option value="mixed">Mixed</option>
+    </select>
+  </div>
+
+  <!-- PET GRID -->
+  <div class="pet-grid" id="pet-grid">
+    <!-- Pets will be dynamically rendered by JS -->
+  </div>
+
+</section>
+
+<style>
+:root {
+  --peach: #ffe0d5;
+  --primary: #ff6f61;
+  --primary-soft: #ffb3ab;
+  --text-medium: #6b7280;
+}
+
+/* SECTION STYLES */
+.pet-adoption {
+  background: var(--peach);
+  padding: 80px 8vw;
+  border-radius: 28px;
+}
+.pet-filters {
+  display: flex;
+  gap: 12px;
+  margin: 24px 0;
+}
+.pet-filters select {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 13px;
+}
+.pet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+/* PET CARD */
+.pet-card {
+  background: linear-gradient(135deg, rgba(255,242,230,0.95), rgba(255,222,211,0.95));
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+.pet-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(255,111,97,0.35);
+}
+.pet-card-img {
+  position: relative;
+}
+.pet-card-img img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+.pet-card-img::after {
+  content: attr(data-hover-text);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 111, 97, 0.85);
+  color: white;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 22px 22px 0 0;
+  font-size: 14px;
+}
+.pet-card-img:hover::after {
+  opacity: 1;
+}
+.pet-status {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  background: var(--primary);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.pet-status.urgent { background: #ff6f61; }
+.pet-status.new { background: var(--primary-soft); color: #111827; }
+.pet-favorite {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255,255,255,0.8);
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: transform 0.2s ease;
+}
+.pet-favorite:hover { transform: scale(1.2); }
+.pet-card-body {
+  padding: 16px 14px;
+}
+.pet-card-body h3 {
+  font-size: 16px;
+  margin-bottom: 4px;
+  color: #111827;
+}
+.pet-card-body p {
+  font-size: 13px;
+  color: var(--text-medium);
+  margin-bottom: 8px;
+}
+.pet-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.pet-tag {
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.pet-tag.vaccinated { background: #fee2e2; color: #b91c1c; }
+.pet-tag.friendly { background: #dcfce7; color: #166534; }
+.pet-tag.kids { background: #e0f2fe; color: #1d4ed8; }
+.adoption-status {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.status-bar {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: #ffe4e6;
+}
+.status-bar.vaccinated { background: #fee2e2; }
+.status-bar.neutered { background: #dcfce7; }
+.status-bar.microchipped { background: #e0f2fe; }
+.pet-card-desc {
+  font-size: 13px;
+  color: var(--text-medium);
+  margin-bottom: 12px;
+}
+.pet-card-btn {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, var(--primary), var(--primary-soft));
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 13px;
+  box-shadow: 0 6px 18px rgba(255,111,97,0.45);
+  transition: transform 0.2s ease;
+}
+.pet-card-btn:hover {
+  transform: translateY(-2px);
+}
+.no-pets {
+  grid-column: 1/-1;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-medium);
+  padding: 20px 0;
+}
+</style>
+
+<script>
+// Pet data
+const pets = [
+  {name:'Lucky', type:'dog', age:'young', color:'brown', status:'new', traits:['vaccinated','friendly','kids'], desc:'Playful and ready for adoption.', img:'beagle_1.jpg'},
+  {name:'Bella', type:'cat', age:'puppy', color:'mixed', status:'urgent', traits:['vaccinated','friendly','kids'], desc:'Tiny fighter with a big heart.', img:'Abyssinian_1.jpg'},
+  {name:'Charlie', type:'dog', age:'adult', color:'black', status:'new', traits:['friendly'], desc:'Loyal and loving companion.', img:'https://images.unsplash.com/photo-1558788353-f76d92427f16?auto=format&fit=crop&w=900&q=80'},
+  {name:'Coco', type:'bird', age:'young', color:'white', status:'new', traits:['friendly'], desc:'Chirpy and social bird.', img:'bird1.jpg'},
+  {name:'Milo', type:'cat', age:'adult', color:'brown', status:'urgent', traits:['vaccinated','kids'], desc:'Calm and affectionate.', img:'Egyptian_Mau_49.jpg'},
+  {name:'Daisy', type:'dog', age:'puppy', color:'white', status:'new', traits:['vaccinated','friendly','kids'], desc:'Energetic little pup.', img:'beagle_2.jpg'},
+  {name:'Sky', type:'bird', age:'adult', color:'mixed', status:'new', traits:['friendly'], desc:'Loves to sing.', img:'bird3.jpg'},
+  {name:'Shadow', type:'dog', age:'senior', color:'black', status:'urgent', traits:['vaccinated','friendly'], desc:'Gentle senior dog.', img:'great_pyrenees_97.jpg'},
+  {name:'Luna', type:'cat', age:'puppy', color:'white', status:'new', traits:['friendly','kids'], desc:'Playful little kitten.', img:'Egyptian_Mau_50.jpg'}
+];
+
+// Render pets
+const grid = document.getElementById('pet-grid');
+function renderPets() {
+  const type = document.getElementById('pet-type').value;
+  const age = document.getElementById('pet-age').value;
+  const color = document.getElementById('pet-color').value;
+
+  const filtered = pets.filter(p => 
+    (type==='' || p.type===type) &&
+    (age==='' || p.age===age) &&
+    (color==='' || p.color===color)
+  );
+
+  grid.innerHTML = filtered.length ? filtered.map(p => `
+    <div class="pet-card">
+      <div class="pet-card-img" data-hover-text="Meet ${p.name}! 🐾">
+        <img src="${p.img}" alt="${p.name}">
+        <span class="pet-status ${p.status}">${p.status==='urgent'?'Urgent':'New Arrival'}</span>
+        <button class="pet-favorite">❤️</button>
+      </div>
+      <div class="pet-card-body">
+        <h3>${p.name}</h3>
+        <p>${p.age==='puppy'?'<1 yr':p.age==='young'?'1–3 yrs':p.age==='adult'?'3–7 yrs':'7+ yrs'} · ${p.type.charAt(0).toUpperCase()+p.type.slice(1)}</p>
+        <div class="pet-tags">
+          ${p.traits.map(t=>`<span class="pet-tag ${t}">${t==='kids'?'👶 Good with kids':t==='friendly'?'😊 Friendly':'💉 Vaccinated'}</span>`).join('')}
+        </div>
+        <div class="adoption-status">
+          ${p.traits.includes('vaccinated')?'<div class="status-bar vaccinated"></div>':''}
+          ${p.traits.includes('neutered')?'<div class="status-bar neutered"></div>':''}
+          ${p.traits.includes('microchipped')?'<div class="status-bar microchipped"></div>':''}
+        </div>
+        <p class="pet-card-desc">${p.desc}</p>
+        <button class="pet-card-btn">Adopt Now</button>
+      </div>
+    </div>
+  `).join('') : '<div class="no-pets">No pets match your selection.</div>';
+}
+
+// Initial render
+renderPets();
+
+// Filter event listeners
+document.getElementById('pet-type').addEventListener('change', renderPets);
+document.getElementById('pet-age').addEventListener('change', renderPets);
+document.getElementById('pet-color').addEventListener('change', renderPets);
+</script>

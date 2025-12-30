@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Report Found Pet – Pet Rescue</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        font-family: "Poppins", sans-serif;
+        background: radial-gradient(circle at top left, #ffe4d6, #fff5f0);
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        padding: 15px;
+        background: rgba(255,255,255,0.9);
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: center;
+        font-size: 26px;
+        font-weight: 700;
+        color: #ff6f61;
+        z-index: 100;
+    }
+    .navbar span { color: #ff9f7a; }
+
+    .form-container {
+        margin: 120px auto;
+        max-width: 650px;
+        background: white;
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    h2 {
+        text-align: center;
+        color: #ff6f61;
+        margin-bottom: 10px;
+    }
+
+    label {
+        font-weight: 600;
+        margin-top: 12px;
+        display: block;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid #ccc;
+        margin-top: 5px;
+        font-size: 14px;
+    }
+
+    textarea { height: 100px; }
+
+    .btn-submit {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #ff6f61, #ff9f7a);
+        border: none;
+        color: white;
+        font-size: 16px;
+        border-radius: 999px;
+        margin-top: 20px;
+        cursor: pointer;
+        font-weight: 700;
+        box-shadow: 0 7px 20px rgba(255,111,97,0.5);
+    }
+
+    /* CAMERA + FILE OPTIONS */
+    .image-options {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-top: 8px;
+    }
+
+    .camera-icon {
+        background: #ff6f61;
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+        font-size: 26px;
+        color: white;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 5px 12px rgba(255,111,97,0.4);
+    }
+
+    /* CAMERA MODAL */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.75);
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+    }
+
+    .modal-content {
+        background: white;
+        padding: 15px;
+        border-radius: 14px;
+        text-align: center;
+    }
+
+    #cameraStream {
+        width: 300px;
+        height: 350px;
+        border-radius: 14px;
+        background: black;
+    }
+
+    .modal-buttons {
+        margin-top: 10px;
+    }
+
+    .capture-btn,
+    .close-btn {
+        padding: 10px 20px;
+        margin: 5px;
+        font-weight: 700;
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .capture-btn {
+        background: #ff6f61;
+        color: white;
+    }
+
+    .close-btn {
+        background: #ddd;
+    }
+
+    /* IMAGE PREVIEW */
+    .image-preview {
+        width: 150px;
+        height: 150px;
+        margin-top: 10px;
+        border-radius: 18px;
+        overflow: hidden;
+        display: none;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+
+    .image-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .back {
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    .back a {
+        color: #ff6f61;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .success-msg {
+        text-align: center;
+        color: #146A23;
+        font-weight: 600;
+        margin-top: 15px;
+        font-size: 16px;
+    }
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">🐾 PET<span>RESCUE</span></div>
+
+<div class="form-container">
+
+    <h2>Report a Found Pet</h2>
+
+    <form action="save_found_pet.php" method="post" enctype="multipart/form-data">
+
+        <!-- IMAGE OPTIONS -->
+        <label>Pet Image</label>
+
+        <div class="image-options">
+            <!-- REAL CAMERA -->
+            <button type="button" class="camera-icon" onclick="openCamera()">📷</button>
+
+            <!-- FILE UPLOAD -->
+            <input type="file" name="image" required>
+        </div>
+
+        <!-- CAMERA MODAL -->
+        <div id="cameraModal" class="modal">
+            <div class="modal-content">
+                <video id="cameraStream" autoplay></video>
+
+                <div class="modal-buttons">
+                    <button type="button" class="capture-btn" onclick="captureImage()">Capture</button>
+                    <button type="button" class="close-btn" onclick="closeCamera()">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- IMAGE PREVIEW -->
+        <div class="image-preview" id="previewBox">
+            <img id="previewImg">
+        </div>
+
+        <!-- FORM FIELDS -->
+        <label>Pet Name (if known)</label>
+        <input type="text" name="pet_name" placeholder="Optional">
+
+        <label>Pet Age</label>
+        <input type="number" name="age" placeholder="Eg: 2">
+
+        <label>Species</label>
+        <select required>
+            <option value="">Select Species</option>
+            <option>Dog</option>
+            <option>Cat</option>
+            <option>Bird</option>
+            <option>Other</option>
+        </select>
+
+        <label>Breed / Color</label>
+        <input type="text" name="breed" placeholder="Eg: Brown Labrador">
+
+        <label>Gender</label>
+        <select>
+            <option value="">Unknown</option>
+            <option>Male</option>
+            <option>Female</option>
+        </select>
+
+        <label>Condition of Pet</label>
+        <textarea name="pet_condition" placeholder="Eg: Looks injured, hungry, tired..."></textarea>
+
+        <label>Location Found</label>
+        <input type="text" name="location" required placeholder="Eg: Near Park Street">
+
+        <label>Description</label>
+        <textarea name="description" placeholder="Anything more about the pet..."></textarea>
+
+        <label>Your Contact Number</label>
+        <input type="text" name="contact" placeholder="Eg: 9876543210">
+
+        <button type="submit" name="submit">Submit Report</button>
+
+        <div id="successMsg" class="success-msg"></div>
+    </form>
+
+    <div class="back">
+        <a href="index.html">← Back to Home</a>
+    </div>
+
+</div>
+
+<!-- CAMERA SCRIPT -->
+<script>
+let stream;
+
+// OPEN CAMERA
+function openCamera() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert("Camera not supported on this browser.");
+        return;
+    }
+
+    document.getElementById("cameraModal").style.display = "flex";
+
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }} )
+    .then(s => {
+        stream = s;
+        document.getElementById("cameraStream").srcObject = stream;
+    })
+    .catch(err => {
+        alert("Camera access denied or blocked! " + err.message);
+    });
+}
+
+// CLOSE CAMERA
+function closeCamera() {
+    document.getElementById("cameraModal").style.display = "none";
+    if (stream) {
+        stream.getTracks().forEach(t => t.stop());
+    }
+}
+
+// CAPTURE IMAGE
+function captureImage() {
+    const video = document.getElementById("cameraStream");
+    const canvas = document.createElement("canvas");
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    canvas.getContext("2d").drawImage(video, 0, 0);
+
+    const imageData = canvas.toDataURL("image/png");
+
+    document.getElementById("previewImg").src = imageData;
+    document.getElementById("previewBox").style.display = "block";
+
+    closeCamera();
+}
+
+// FILE UPLOAD PREVIEW
+document.getElementById("fileInput").addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        document.getElementById("previewImg").src = URL.createObjectURL(file);
+        document.getElementById("previewBox").style.display = "block";
+    }
+});
+
+// FORM SUBMIT
+document.getElementById("foundForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    document.getElementById("successMsg").textContent = "Found pet report submitted successfully!";
+    document.getElementById("foundForm").reset();
+    document.getElementById("previewBox").style.display = "none";
+});
+</script>
+
+</body>
+</html>

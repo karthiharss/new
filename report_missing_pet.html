@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Report Missing Pet</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  body { font-family: "Poppins", sans-serif; background: radial-gradient(circle at top left,#ffe4d6,#fff5f0); margin:0; }
+  .container { max-width:780px; margin:80px auto; background:#fff; padding:25px 30px; border-radius:14px; box-shadow:0 12px 30px rgba(0,0,0,0.08); }
+  h1 { color:#ff6f61; text-align:center; margin-bottom:20px; }
+  label{ display:block; margin-top:12px; font-weight:600; color:#333; }
+  input, select, textarea, button { width:100%; padding:10px 12px; border-radius:10px; border:1px solid #ccc; margin-top:6px; font-size:14px; }
+  textarea{ min-height:100px; }
+  .img-preview { margin-top:10px; width:200px; height:200px; border-radius:12px; overflow:hidden; display:none; box-shadow:0 6px 18px rgba(0,0,0,0.12); }
+  .img-preview img{ width:100%; height:100%; object-fit:cover; }
+  .btn-primary { background:linear-gradient(135deg,#ff6f61,#ff9f7a); color:white; border:none; font-weight:700; cursor:pointer; padding:12px; border-radius:999px; margin-top:20px; }
+  .btn-outline { background:#fff; border:1px solid #ddd; cursor:pointer; padding:10px; border-radius:8px; margin-top:10px; }
+  .row { display:flex; gap:10px; align-items:center; }
+  .small { width:120px; }
+  .meta { margin-top:12px; color:#146A23; font-weight:600; text-align:center; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Report Missing Pet</h1>
+
+  <form id="missingForm" action="save_missing_pet.php" method="POST" enctype="multipart/form-data">
+    <label>Owner Name</label>
+    <input name="owner_name" type="text" placeholder="John Doe" required>
+
+    <label>Pet Name</label>
+    <input name="pet_name" type="text" placeholder="Buddy" required>
+
+    <label>Date Missing</label>
+    <input name="date_missing" type="date" required>
+
+    <label>Pet Color / Breed</label>
+    <input name="breed" type="text" placeholder="Brown Labrador">
+
+    <label>Pet Age</label>
+    <input name="age" type="number" min="0" placeholder="2">
+
+    <label>Address / Location</label>
+    <input name="address" type="text" placeholder="Street, City, State" required>
+
+    <label>Upload Image</label>
+    <div class="row">
+      <input id="fileUpload" name="pet_image" type="file" accept="image/*" class="btn-outline" />
+      <a href="capture_real_time.html">
+    <button id="openCameraBtn" type="button" class="btn-outline small">Camera</button>
+</a>
+    </div>
+
+    <div class="img-preview" id="previewBox">
+      <img id="previewImg" alt="preview">
+    </div>
+
+    <label>Additional Details</label>
+    <textarea name="description" placeholder="Any additional information..."></textarea>
+
+    <label>Your Contact</label>
+    <input name="contact" type="text" required placeholder="9876543210">
+
+    <button class="btn-primary" type="submit">Submit Missing Report</button>
+    <div id="statusMsg" class="meta"></div>
+  </form>
+</div>
+
+<script>
+  const missingForm = document.getElementById("missingForm");
+  const previewBox = document.getElementById("previewBox");
+  const previewImg = document.getElementById("previewImg");
+  const fileInput = document.getElementById("fileUpload");
+  const statusMsg = document.getElementById("statusMsg");
+  const openCameraBtn = document.getElementById("openCameraBtn");
+
+  // Show preview when user selects a file
+  fileInput.addEventListener("change", () => {
+    const file = fileInput.files[0];
+    if(!file) {
+      previewBox.style.display = "none";
+      return;
+    }
+    previewImg.src = URL.createObjectURL(file);
+    previewBox.style.display = "block";
+  });
+
+  // Open camera page (capture in a new tab)
+  openCameraBtn.addEventListener("click", () => {
+    window.open("/capture_real_time.html", "_blank");
+  });
+
+
+</script>
+
+</body>
+</html>
